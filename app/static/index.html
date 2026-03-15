@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ECG Classifier — Upload & Predict</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <nav class="nav">
+    <span class="nav-title">ECG Classifier</span>
+    <div class="theme-toggle-wrap">
+      <button type="button" class="theme-toggle" id="themeToggle" title="Toggle dark mode" aria-label="Toggle dark mode">
+        <span class="icon-sun" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/></svg></span>
+        <span class="icon-moon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg></span>
+      </button>
+      <a href="dashboard.html" class="nav-link">Dashboard</a>
+    </div>
+  </nav>
+
+  <main class="container">
+    <section class="card">
+      <h2 class="card-title">Upload ECG</h2>
+      <div class="upload-zone" id="uploadZone" role="button" tabindex="0">
+        <p>Drag and drop your ECG file here, or click to browse.</p>
+        <p class="hint">Accepted: .dat, .csv, .npy</p>
+        <input type="file" id="fileInput" class="input-file-hidden" accept=".dat,.csv,.npy">
+      </div>
+      <div class="options-row">
+        <label for="modelSelect">Model</label>
+        <select id="modelSelect">
+          <option value="resnet">ResNet</option>
+          <option value="cnn">CNN</option>
+          <option value="cnn_lstm">CNN+LSTM</option>
+          <option value="transformer">Transformer</option>
+        </select>
+        <label for="rateSelect">Sampling rate</label>
+        <select id="rateSelect">
+          <option value="100">100 Hz</option>
+          <option value="500" selected>500 Hz</option>
+        </select>
+        <button type="button" class="btn btn-primary" id="submitBtn" disabled>Classify ECG</button>
+      </div>
+    </section>
+
+    <section class="card" id="chartSection" style="display: none;">
+      <h2 class="card-title">ECG Signal (12 leads)</h2>
+      <div class="ecg-chart-container" id="ecgChartDiv"></div>
+    </section>
+
+    <section class="card" id="resultsSection" style="display: none;">
+      <h2 class="card-title">Prediction results</h2>
+      <div class="prediction-bars" id="predictionBars"></div>
+    </section>
+  </main>
+
+  <div class="loading-overlay" id="loadingOverlay">
+    <div class="spinner"></div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+  <script src="js/ecg_chart.js"></script>
+  <script src="js/upload.js"></script>
+</body>
+</html>

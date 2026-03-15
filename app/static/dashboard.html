@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ECG Classifier — Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <nav class="nav">
+    <span class="nav-title">ECG Classifier</span>
+    <div class="theme-toggle-wrap">
+      <button type="button" class="theme-toggle" id="themeToggle" title="Toggle dark mode" aria-label="Toggle dark mode">
+        <span class="icon-sun" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/></svg></span>
+        <span class="icon-moon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg></span>
+      </button>
+      <a href="index.html" class="nav-link">Upload & Predict</a>
+    </div>
+  </nav>
+
+  <main class="container">
+    <section class="card">
+      <h2 class="card-title">Summary (best across models)</h2>
+      <div class="summary-cards" id="summaryCards">
+        <div class="summary-card"><p class="metric-name">Macro AUC-ROC</p><p class="metric-value" id="bestAuc">—</p></div>
+        <div class="summary-card"><p class="metric-name">Macro F1</p><p class="metric-value" id="bestF1">—</p></div>
+        <div class="summary-card"><p class="metric-name">Hamming Loss</p><p class="metric-value" id="bestHamming">—</p></div>
+        <div class="summary-card"><p class="metric-name">Subset Accuracy</p><p class="metric-value" id="bestSubset">—</p></div>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2 class="card-title">Model</h2>
+      <div class="model-tabs" id="modelTabs"></div>
+
+      <h3 class="card-title">Per-class AUC (selected model)</h3>
+      <div class="dashboard-chart" id="perClassAucChart"></div>
+
+      <h3 class="card-title">Model comparison (AUC & F1)</h3>
+      <div class="dashboard-chart" id="comparisonChart"></div>
+
+      <h3 class="card-title">Confusion matrices (selected model)</h3>
+      <div class="confusion-grid" id="confusionGrid"></div>
+    </section>
+  </main>
+
+  <div class="loading-overlay" id="loadingOverlay">
+    <div class="spinner"></div>
+  </div>
+
+  <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+  <script src="js/dashboard.js"></script>
+</body>
+</html>
