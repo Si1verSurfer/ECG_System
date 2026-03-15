@@ -1,0 +1,451 @@
+/* ECG Classifier — shared styles */
+:root {
+  --primary: #2563eb;
+  --accent: #1d4ed8;
+  --success: #16a34a;
+  --warning: #ea580c;
+  --gray-absent: #9ca3af;
+  --gray-bg: #f3f4f6;
+  --gray-border: #e5e7eb;
+  --card-bg: #ffffff;
+  --text: #111827;
+  --text-muted: #6b7280;
+  --shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  --radius: 12px;
+}
+
+/* Dark mode */
+[data-theme="dark"] {
+  --primary: #3b82f6;
+  --accent: #60a5fa;
+  --success: #22c55e;
+  --warning: #f97316;
+  --gray-absent: #6b7280;
+  --gray-bg: #111827;
+  --gray-border: #374151;
+  --card-bg: #1f2937;
+  --text: #f9fafb;
+  --text-muted: #9ca3af;
+  --shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+}
+[data-theme="dark"] .upload-zone.drag-over {
+  background: rgba(59, 130, 246, 0.12);
+}
+[data-theme="dark"] .loading-overlay {
+  background: rgba(17, 24, 39, 0.85);
+}
+[data-theme="dark"] .toast {
+  background: #374151;
+}
+[data-theme="dark"] .toast.error {
+  background: #dc2626;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: "Inter", system-ui, -apple-system, sans-serif;
+  font-size: 16px;
+  line-height: 1.5;
+  color: var(--text);
+  background: var(--gray-bg);
+}
+
+/* Navigation */
+.nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 1.5rem;
+  background: var(--card-bg);
+  box-shadow: var(--shadow);
+}
+
+.nav-title {
+  font-weight: 700;
+  font-size: 1.25rem;
+  color: var(--text);
+}
+
+.nav-link {
+  color: var(--primary);
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.nav-link:hover {
+  text-decoration: underline;
+}
+
+/* Layout */
+.container {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 1.5rem;
+}
+
+@media (min-width: 769px) {
+  .grid-two {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding: 1rem;
+  }
+}
+
+/* Cards */
+.card {
+  background: var(--card-bg);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 1.25rem;
+  margin-bottom: 1rem;
+}
+
+.card-title {
+  font-size: 1rem;
+  font-weight: 600;
+  margin: 0 0 0.75rem 0;
+  color: var(--text);
+}
+
+/* Upload zone */
+.upload-zone {
+  border: 2px dashed var(--gray-border);
+  border-radius: var(--radius);
+  padding: 2rem;
+  text-align: center;
+  background: var(--card-bg);
+  transition: border-color 0.2s, background 0.2s;
+  cursor: pointer;
+}
+
+.upload-zone.drag-over {
+  border-color: var(--primary);
+  border-style: solid;
+  background: rgba(37, 99, 235, 0.04);
+}
+
+.upload-zone p {
+  margin: 0;
+  color: var(--text-muted);
+}
+
+.upload-zone .hint {
+  font-size: 0.875rem;
+  margin-top: 0.5rem;
+}
+
+/* Buttons */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.625rem 1.25rem;
+  font-size: 1rem;
+  font-weight: 500;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: opacity 0.2s, background 0.2s;
+  font-family: inherit;
+}
+
+.btn-primary {
+  background: var(--primary);
+  color: white;
+}
+
+.btn-primary:hover:not(:disabled) {
+  background: var(--accent);
+}
+
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Options row */
+.options-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  align-items: center;
+  margin: 1rem 0;
+}
+
+.options-row label {
+  font-weight: 500;
+  color: var(--text);
+}
+
+.options-row select {
+  padding: 0.5rem 0.75rem;
+  border: 1px solid var(--gray-border);
+  border-radius: 8px;
+  font-size: 1rem;
+  font-family: inherit;
+  min-width: 140px;
+}
+
+/* ECG chart container */
+.ecg-chart-container {
+  width: 100%;
+  min-height: 400px;
+  max-height: 70vh;
+  overflow: auto;
+  margin: 1rem 0;
+  background: var(--card-bg);
+  border-radius: var(--radius);
+  padding: 0.5rem;
+}
+
+.ecg-chart-container .plotly {
+  width: 100% !important;
+}
+
+/* Prediction bars */
+.prediction-bars {
+  margin-top: 1rem;
+}
+
+.pred-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.5rem;
+}
+
+.pred-label {
+  font-weight: 500;
+  min-width: 4rem;
+  font-size: 0.875rem;
+}
+
+.pred-bar-wrap {
+  flex: 1;
+  height: 24px;
+  background: var(--gray-bg);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.pred-bar {
+  height: 100%;
+  border-radius: 4px;
+  transition: width 0.3s ease;
+}
+
+.pred-bar.success {
+  background: var(--success);
+}
+
+.pred-bar.warning {
+  background: var(--warning);
+}
+
+.pred-bar.absent {
+  background: var(--gray-absent);
+}
+
+.pred-pct {
+  font-size: 0.875rem;
+  color: var(--text-muted);
+  min-width: 3rem;
+  text-align: right;
+}
+
+/* Loading overlay */
+.loading-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(255, 255, 255, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  visibility: hidden;
+  opacity: 0;
+  transition: visibility 0.2s, opacity 0.2s;
+}
+
+.loading-overlay.visible {
+  visibility: visible;
+  opacity: 1;
+}
+
+.spinner {
+  width: 48px;
+  height: 48px;
+  border: 4px solid var(--gray-border);
+  border-top-color: var(--primary);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Toast */
+.toast {
+  position: fixed;
+  bottom: 1.5rem;
+  left: 50%;
+  transform: translateX(-50%) translateY(100px);
+  padding: 0.75rem 1.25rem;
+  background: #1f2937;
+  color: white;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  z-index: 1001;
+  opacity: 0;
+  transition: transform 0.3s, opacity 0.3s;
+}
+
+.toast.visible {
+  transform: translateX(-50%) translateY(0);
+  opacity: 1;
+}
+
+.toast.error {
+  background: #b91c1c;
+}
+
+/* Dashboard: summary cards */
+.summary-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.summary-card {
+  background: var(--card-bg);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 1.25rem;
+}
+
+.summary-card .metric-name {
+  font-size: 0.875rem;
+  color: var(--text-muted);
+  margin: 0 0 0.25rem 0;
+}
+
+.summary-card .metric-value {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--text);
+  margin: 0;
+}
+
+/* Dashboard: tabs */
+.model-tabs {
+  display: flex;
+  gap: 0.25rem;
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
+}
+
+.model-tabs button {
+  padding: 0.5rem 1rem;
+  border: 1px solid var(--gray-border);
+  background: var(--card-bg);
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.875rem;
+  font-weight: 500;
+  font-family: inherit;
+}
+
+.model-tabs button:hover {
+  background: var(--gray-bg);
+}
+
+.model-tabs button.active {
+  background: var(--primary);
+  color: white;
+  border-color: var(--primary);
+}
+
+/* Dashboard: chart containers */
+.dashboard-chart {
+  width: 100%;
+  min-height: 300px;
+  margin: 1rem 0;
+}
+
+.confusion-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.confusion-grid .dashboard-chart {
+  min-height: 220px;
+}
+
+/* Hide file input */
+.input-file-hidden {
+  position: absolute;
+  width: 0.1px;
+  height: 0.1px;
+  opacity: 0;
+  overflow: hidden;
+  z-index: -1;
+}
+
+/* Theme toggle (dashboard) */
+.theme-toggle-wrap {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.theme-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  padding: 0;
+  border: 1px solid var(--gray-border);
+  border-radius: 8px;
+  background: var(--card-bg);
+  color: var(--text);
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s;
+  font-size: 1.1rem;
+}
+.theme-toggle:hover {
+  background: var(--gray-bg);
+}
+.theme-toggle svg {
+  width: 1.25rem;
+  height: 1.25rem;
+  fill: currentColor;
+}
+.theme-toggle .icon-sun {
+  display: none;
+}
+.theme-toggle .icon-moon {
+  display: block;
+}
+[data-theme="dark"] .theme-toggle .icon-moon {
+  display: none;
+}
+[data-theme="dark"] .theme-toggle .icon-sun {
+  display: block;
+}
