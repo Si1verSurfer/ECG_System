@@ -47,8 +47,13 @@
   window.addEventListener("ecg-theme-change", applyChartTheme);
 
   function setLoading(visible) {
-    if (visible) loadingOverlay.classList.add("visible");
-    else loadingOverlay.classList.remove("visible");
+    if (visible) {
+      loadingOverlay.classList.add("visible");
+      loadingOverlay.setAttribute("aria-hidden", "false");
+    } else {
+      loadingOverlay.classList.remove("visible");
+      loadingOverlay.setAttribute("aria-hidden", "true");
+    }
   }
 
   function bestValue(key, higherIsBetter) {
@@ -78,15 +83,24 @@
     var models = Object.keys(metricsData);
     if (models.length === 0) models = ["resnet", "cnn", "cnn_lstm", "transformer"];
     modelTabs.innerHTML = "";
-    models.forEach(function (m) {
+    modelTabs.setAttribute("role", "tablist");
+    modelTabs.setAttribute("aria-label", "Select model");
+    models.forEach(function (m, idx) {
       var btn = document.createElement("button");
+      btn.setAttribute("role", "tab");
+      btn.setAttribute("aria-selected", m === selectedModel ? "true" : "false");
+      btn.setAttribute("tabindex", m === selectedModel ? 0 : -1);
+      btn.id = "tab-" + m;
       btn.textContent = m.charAt(0).toUpperCase() + m.slice(1).replace(/_/g, "+");
       btn.dataset.model = m;
       btn.classList.toggle("active", m === selectedModel);
       btn.addEventListener("click", function () {
         selectedModel = m;
         document.querySelectorAll(".model-tabs button").forEach(function (b) {
-          b.classList.toggle("active", b.dataset.model === selectedModel);
+          var isActive = b.dataset.model === selectedModel;
+          b.classList.toggle("active", isActive);
+          b.setAttribute("aria-selected", isActive ? "true" : "false");
+          b.setAttribute("tabindex", isActive ? 0 : -1);
         });
         renderPerClassAuc();
         renderConfusionMatrices();
@@ -141,6 +155,8 @@
     var cms = m.confusion_matrices;
     var labels = Object.keys(cms);
     if (labels.length === 0) return;
+    var fragment = document.createDocumentFragment();
+    var divs = [];
     labels.forEach(function (label) {
       var matrix = cms[label];
       var z = (matrix && matrix.z) ? matrix.z : (Array.isArray(matrix) ? matrix : null);
@@ -153,10 +169,14 @@
       }
       var div = document.createElement("div");
       div.className = "dashboard-chart";
-      confusionGrid.appendChild(div);
-      var trace = { z: z, x: x, y: y, type: "heatmap", colorscale: "Blues" };
-      var layout = Object.assign({ title: label, margin: { t: 32, b: 32, l: 44, r: 24 } }, chartLayoutTheme());
-      Plotly.newPlot(div, [trace], layout, { responsive: true });
+      fragment.appendChild(div);
+      divs.push({ el: div, label: label, z: z, x: x, y: y });
+    });
+    confusionGrid.appendChild(fragment);
+    divs.forEach(function (item) {
+      var trace = { z: item.z, x: item.x, y: item.y, type: "heatmap", colorscale: "Blues" };
+      var layout = Object.assign({ title: item.label, margin: { t: 32, b: 32, l: 44, r: 24 } }, chartLayoutTheme());
+      Plotly.newPlot(item.el, [trace], layout, { responsive: true });
     });
   }
 
@@ -167,16 +187,20 @@
       metricsData = data || {};
       var models = Object.keys(metricsData);
       if (models.length > 0 && !metricsData[selectedModel]) selectedModel = models[0];
-      renderSummaryCards();
-      renderTabs();
-      renderPerClassAuc();
-      renderComparisonChart();
-      renderConfusionMatrices();
+      requestAnimationFrame(function () {
+        renderSummaryCards();
+        renderTabs();
+        renderPerClassAuc();
+        renderComparisonChart();
+        renderConfusionMatrices();
+      });
     })
     .catch(function () {
       metricsData = {};
-      renderSummaryCards();
-      renderTabs();
+      requestAnimationFrame(function () {
+        renderSummaryCards();
+        renderTabs();
+      });
     })
     .finally(function () {
       setLoading(false);

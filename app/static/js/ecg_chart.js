@@ -1,3 +1,6 @@
+/** Max points per lead for display (downsample longer signals for fast render) */
+var ECG_CHART_MAX_POINTS = 4000;
+
 /**
  * Returns Plotly layout options for the current theme (light/dark).
  */
@@ -11,6 +14,15 @@ function getEcgChartThemeLayout() {
     xaxis: { color: isDark ? "#e5e7eb" : "#111827" },
     yaxis: { color: isDark ? "#e5e7eb" : "#111827" },
   };
+}
+
+/**
+ * Update only theme (relayout) for an existing ECG chart — fast, no full re-render.
+ */
+function updateEcgChartTheme(containerId) {
+  var el = document.getElementById(containerId);
+  if (!el || !el.querySelector || !el.querySelector(".plotly")) return;
+  Plotly.relayout(el, getEcgChartThemeLayout());
 }
 
 /**
@@ -35,12 +47,18 @@ function renderEcgChart(containerId, signal, leadNames, samplingRate) {
 
   for (var i = 0; i < nLeads; i++) {
     var n = signal[i].length;
+    var step = n > ECG_CHART_MAX_POINTS ? Math.ceil(n / ECG_CHART_MAX_POINTS) : 1;
     var time = [];
-    for (var t = 0; t < n; t++) time.push(t / rate);
+    var yVals = step === 1 ? signal[i] : [];
+    for (var t = 0; t < n; t += step) {
+      time.push(t / rate);
+      if (step > 1) yVals.push(signal[i][t]);
+    }
+    if (step === 1) yVals = signal[i];
     var yax = i === 0 ? "y" : "y" + (i + 1);
     traces.push({
       x: time,
-      y: signal[i],
+      y: yVals,
       type: "scatter",
       mode: "lines",
       name: names[i] || "L" + (i + 1),

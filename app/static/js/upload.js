@@ -13,11 +13,12 @@
 
   var selectedFile = null;
   var lastChartData = null;
+  var predictAbort = null;
 
-  // Re-render ECG chart when theme changes so it uses the new colors
+  // Fast theme update: relayout only, no full re-render
   window.addEventListener("ecg-theme-change", function () {
-    if (lastChartData && ecgChartDiv && typeof renderEcgChart === "function") {
-      renderEcgChart("ecgChartDiv", lastChartData.signal, lastChartData.leadNames, lastChartData.rate);
+    if (ecgChartDiv && ecgChartDiv.querySelector && ecgChartDiv.querySelector(".plotly") && typeof updateEcgChartTheme === "function") {
+      updateEcgChartTheme("ecgChartDiv");
     }
   });
 
@@ -31,8 +32,13 @@
   }
 
   function setLoading(visible) {
-    if (visible) loadingOverlay.classList.add("visible");
-    else loadingOverlay.classList.remove("visible");
+    if (visible) {
+      loadingOverlay.classList.add("visible");
+      loadingOverlay.setAttribute("aria-hidden", "false");
+    } else {
+      loadingOverlay.classList.remove("visible");
+      loadingOverlay.setAttribute("aria-hidden", "true");
+    }
     submitBtn.disabled = visible;
   }
 
@@ -57,8 +63,18 @@
     predictionBars.innerHTML = html;
   }
 
-  uploadZone.addEventListener("click", function () {
+  function openFilePicker() {
     fileInput.click();
+  }
+  uploadZone.addEventListener("click", function (e) {
+    if (e.target === fileInput) return;
+    openFilePicker();
+  });
+  uploadZone.addEventListener("keydown", function (e) {
+    if (e.key === "Enter" || e.key === " ") {
+      e.preventDefault();
+      openFilePicker();
+    }
   });
   uploadZone.addEventListener("dragover", function (e) {
     e.preventDefault();
@@ -89,6 +105,8 @@
 
   submitBtn.addEventListener("click", function () {
     if (!selectedFile) return;
+    if (predictAbort) predictAbort.abort();
+    predictAbort = new AbortController();
     setLoading(true);
     chartSection.style.display = "none";
     resultsSection.style.display = "none";
@@ -101,6 +119,7 @@
     fetch("/api/predict", {
       method: "POST",
       body: formData,
+      signal: predictAbort.signal,
     })
       .then(function (res) {
         if (!res.ok) {
@@ -126,42 +145,54 @@
         var signal = data.signal || [];
         var leadNames = data.lead_names || [];
         var rate = parseInt(rateSelect.value, 10) || 500;
-        if (signal.length > 0 && ecgChartDiv) {
-          chartSection.style.display = "block";
-          lastChartData = { signal: signal, leadNames: leadNames, rate: rate };
-          if (typeof renderEcgChart === "function") {
-            renderEcgChart("ecgChartDiv", signal, leadNames, rate);
+        var probs = data.probabilities;
+        requestAnimationFrame(function () {
+          if (signal.length > 0 && ecgChartDiv) {
+            chartSection.style.display = "block";
+            lastChartData = { signal: signal, leadNames: leadNames, rate: rate };
+            if (typeof renderEcgChart === "function") {
+              renderEcgChart("ecgChartDiv", signal, leadNames, rate);
+            }
           }
-        }
-        if (data.probabilities) {
-          resultsSection.style.display = "block";
-          renderProbabilityBars(data.probabilities);
-        }
+          if (probs) {
+            resultsSection.style.display = "block";
+            renderProbabilityBars(probs);
+          }
+        });
       })
       .catch(function (err) {
+        if (err.name === "AbortError") return;
         showToast(err.message || "Server error. Please try again.", true);
       })
       .finally(function () {
         setLoading(false);
+        predictAbort = null;
       });
   });
 
-  // Populate model dropdown from API if desired (optional)
-  fetch("/api/models")
-    .then(function (r) { return r.json(); })
-    .then(function (names) {
-      if (Array.isArray(names) && names.length > 0 && modelSelect) {
-        var opts = modelSelect.querySelectorAll("option");
-        if (opts.length <= 1) {
-          modelSelect.innerHTML = "";
-          names.forEach(function (n) {
-            var opt = document.createElement("option");
-            opt.value = n;
-            opt.textContent = n.charAt(0).toUpperCase() + n.slice(1).replace(/_/g, "+");
-            modelSelect.appendChild(opt);
-          });
+  // Defer model list fetch until after first paint (keeps initial load fast)
+  function loadModels() {
+    fetch("/api/models")
+      .then(function (r) { return r.json(); })
+      .then(function (names) {
+        if (Array.isArray(names) && names.length > 0 && modelSelect) {
+          var opts = modelSelect.querySelectorAll("option");
+          if (opts.length <= 1) {
+            modelSelect.innerHTML = "";
+            names.forEach(function (n) {
+              var opt = document.createElement("option");
+              opt.value = n;
+              opt.textContent = n.charAt(0).toUpperCase() + n.slice(1).replace(/_/g, "+");
+              modelSelect.appendChild(opt);
+            });
+          }
         }
-      }
-    })
-    .catch(function () {});
+      })
+      .catch(function () {});
+  }
+  if (typeof requestIdleCallback !== "undefined") {
+    requestIdleCallback(loadModels, { timeout: 2000 });
+  } else {
+    setTimeout(loadModels, 100);
+  }
 })();
