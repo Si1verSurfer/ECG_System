@@ -22,39 +22,41 @@
   </nav>
 
   <main class="container">
-    <section class="card">
-      <h2 class="card-title">Upload ECG</h2>
-      <div class="upload-zone" id="uploadZone" role="button" tabindex="0">
-        <p>Drag and drop your ECG file here, or click to browse.</p>
-        <p class="hint">Accepted: .dat, .csv, .npy</p>
-        <input type="file" id="fileInput" class="input-file-hidden" accept=".dat,.csv,.npy">
+    <div class="page-grid">
+      <section class="card">
+        <h2 class="card-title">Upload ECG</h2>
+        <div class="upload-zone" id="uploadZone" role="button" tabindex="0">
+          <p>Drag and drop your ECG file here, or click to browse.</p>
+          <p class="hint">Accepted: .dat, .csv, .npy</p>
+          <input type="file" id="fileInput" class="input-file-hidden" accept=".dat,.csv,.npy">
+        </div>
+        <div class="options-row">
+          <label for="modelSelect">Model</label>
+          <select id="modelSelect">
+            <option value="resnet">ResNet</option>
+            <option value="cnn">CNN</option>
+            <option value="cnn_lstm">CNN+LSTM</option>
+            <option value="transformer">Transformer</option>
+          </select>
+          <label for="rateSelect">Sampling rate</label>
+          <select id="rateSelect">
+            <option value="100">100 Hz</option>
+            <option value="500" selected>500 Hz</option>
+          </select>
+          <button type="button" class="btn btn-primary" id="submitBtn" disabled>Classify ECG</button>
+        </div>
+      </section>
+      <div class="page-grid-right">
+        <section class="card" id="chartSection" style="display: none;">
+          <h2 class="card-title">ECG Signal (12 leads)</h2>
+          <div class="ecg-chart-container" id="ecgChartDiv"></div>
+        </section>
+        <section class="card" id="resultsSection" style="display: none;">
+          <h2 class="card-title">Prediction results</h2>
+          <div class="prediction-bars" id="predictionBars"></div>
+        </section>
       </div>
-      <div class="options-row">
-        <label for="modelSelect">Model</label>
-        <select id="modelSelect">
-          <option value="resnet">ResNet</option>
-          <option value="cnn">CNN</option>
-          <option value="cnn_lstm">CNN+LSTM</option>
-          <option value="transformer">Transformer</option>
-        </select>
-        <label for="rateSelect">Sampling rate</label>
-        <select id="rateSelect">
-          <option value="100">100 Hz</option>
-          <option value="500" selected>500 Hz</option>
-        </select>
-        <button type="button" class="btn btn-primary" id="submitBtn" disabled>Classify ECG</button>
-      </div>
-    </section>
-
-    <section class="card" id="chartSection" style="display: none;">
-      <h2 class="card-title">ECG Signal (12 leads)</h2>
-      <div class="ecg-chart-container" id="ecgChartDiv"></div>
-    </section>
-
-    <section class="card" id="resultsSection" style="display: none;">
-      <h2 class="card-title">Prediction results</h2>
-      <div class="prediction-bars" id="predictionBars"></div>
-    </section>
+    </div>
   </main>
 
   <div class="loading-overlay" id="loadingOverlay">

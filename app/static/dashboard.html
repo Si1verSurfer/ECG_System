@@ -32,16 +32,20 @@
       </div>
     </section>
 
+    <div class="dashboard-grid">
+      <section class="card">
+        <h2 class="card-title">Model</h2>
+        <div class="model-tabs" id="modelTabs"></div>
+        <h3 class="card-title">Per-class AUC (selected model)</h3>
+        <div class="dashboard-chart" id="perClassAucChart"></div>
+      </section>
+      <section class="card">
+        <h3 class="card-title">Model comparison (AUC & F1)</h3>
+        <div class="dashboard-chart" id="comparisonChart"></div>
+      </section>
+    </div>
+
     <section class="card">
-      <h2 class="card-title">Model</h2>
-      <div class="model-tabs" id="modelTabs"></div>
-
-      <h3 class="card-title">Per-class AUC (selected model)</h3>
-      <div class="dashboard-chart" id="perClassAucChart"></div>
-
-      <h3 class="card-title">Model comparison (AUC & F1)</h3>
-      <div class="dashboard-chart" id="comparisonChart"></div>
-
       <h3 class="card-title">Confusion matrices (selected model)</h3>
       <div class="confusion-grid" id="confusionGrid"></div>
     </section>
