@@ -1,0 +1,82 @@
+{
+  "resnet": {
+    "macro_auc": 0.931,
+    "macro_f1": 0.847,
+    "hamming_loss": 0.043,
+    "subset_accuracy": 0.712,
+    "per_class_auc": {
+      "NORM": 0.96,
+      "MI": 0.93,
+      "STTC": 0.91,
+      "CD": 0.90,
+      "HYP": 0.88
+    },
+    "confusion_matrices": {
+      "NORM": { "z": [[850, 50], [80, 20]], "x": ["Pred 0", "Pred 1"], "y": ["True 1", "True 0"] },
+      "MI": { "z": [[920, 30], [25, 25]], "x": ["Pred 0", "Pred 1"], "y": ["True 1", "True 0"] },
+      "STTC": { "z": [[880, 45], [55, 20]], "x": ["Pred 0", "Pred 1"], "y": ["True 1", "True 0"] },
+      "CD": { "z": [[900, 40], [45, 15]], "x": ["Pred 0", "Pred 1"], "y": ["True 1", "True 0"] },
+      "HYP": { "z": [[890, 50], [50, 10]], "x": ["Pred 0", "Pred 1"], "y": ["True 1", "True 0"] }
+    }
+  },
+  "cnn": {
+    "macro_auc": 0.918,
+    "macro_f1": 0.831,
+    "hamming_loss": 0.051,
+    "subset_accuracy": 0.698,
+    "per_class_auc": {
+      "NORM": 0.94,
+      "MI": 0.92,
+      "STTC": 0.89,
+      "CD": 0.88,
+      "HYP": 0.86
+    },
+    "confusion_matrices": {
+      "NORM": { "z": [[840, 60], [85, 15]], "x": ["Pred 0", "Pred 1"], "y": ["True 1", "True 0"] },
+      "MI": { "z": [[910, 40], [35, 15]], "x": ["Pred 0", "Pred 1"], "y": ["True 1", "True 0"] },
+      "STTC": { "z": [[870, 55], [60, 15]], "x": ["Pred 0", "Pred 1"], "y": ["True 1", "True 0"] },
+      "CD": { "z": [[890, 50], [50, 10]], "x": ["Pred 0", "Pred 1"], "y": ["True 1", "True 0"] },
+      "HYP": { "z": [[880, 60], [55, 5]], "x": ["Pred 0", "Pred 1"], "y": ["True 1", "True 0"] }
+    }
+  },
+  "cnn_lstm": {
+    "macro_auc": 0.925,
+    "macro_f1": 0.839,
+    "hamming_loss": 0.047,
+    "subset_accuracy": 0.705,
+    "per_class_auc": {
+      "NORM": 0.95,
+      "MI": 0.925,
+      "STTC": 0.90,
+      "CD": 0.89,
+      "HYP": 0.87
+    },
+    "confusion_matrices": {
+      "NORM": { "z": [[845, 55], [82, 18]], "x": ["Pred 0", "Pred 1"], "y": ["True 1", "True 0"] },
+      "MI": { "z": [[915, 35], [28, 22]], "x": ["Pred 0", "Pred 1"], "y": ["True 1", "True 0"] },
+      "STTC": { "z": [[875, 50], [58, 17]], "x": ["Pred 0", "Pred 1"], "y": ["True 1", "True 0"] },
+      "CD": { "z": [[895, 45], [48, 12]], "x": ["Pred 0", "Pred 1"], "y": ["True 1", "True 0"] },
+      "HYP": { "z": [[885, 55], [52, 8]], "x": ["Pred 0", "Pred 1"], "y": ["True 1", "True 0"] }
+    }
+  },
+  "transformer": {
+    "macro_auc": 0.928,
+    "macro_f1": 0.842,
+    "hamming_loss": 0.045,
+    "subset_accuracy": 0.708,
+    "per_class_auc": {
+      "NORM": 0.955,
+      "MI": 0.928,
+      "STTC": 0.905,
+      "CD": 0.895,
+      "HYP": 0.875
+    },
+    "confusion_matrices": {
+      "NORM": { "z": [[848, 52], [78, 22]], "x": ["Pred 0", "Pred 1"], "y": ["True 1", "True 0"] },
+      "MI": { "z": [[918, 32], [27, 23]], "x": ["Pred 0", "Pred 1"], "y": ["True 1", "True 0"] },
+      "STTC": { "z": [[878, 47], [57, 18]], "x": ["Pred 0", "Pred 1"], "y": ["True 1", "True 0"] },
+      "CD": { "z": [[898, 42], [46, 14]], "x": ["Pred 0", "Pred 1"], "y": ["True 1", "True 0"] },
+      "HYP": { "z": [[888, 52], [51, 9]], "x": ["Pred 0", "Pred 1"], "y": ["True 1", "True 0"] }
+    }
+  }
+}
