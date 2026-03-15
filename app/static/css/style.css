@@ -64,15 +64,21 @@ body {
   transition: background-color 0.25s ease, color 0.25s ease;
 }
 
-/* Navigation */
+/* Navigation — full width bar, content centered */
 .nav {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
   padding: 1rem 1.5rem;
   background: var(--card-bg);
   box-shadow: var(--shadow);
   transition: background-color 0.25s ease, color 0.25s ease, box-shadow 0.25s ease;
+}
+
+.nav-inner {
+  max-width: 960px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
 }
 
 .nav-title {
@@ -96,11 +102,64 @@ body {
   outline-offset: 2px;
 }
 
-/* Layout */
+/* Layout — centered content, consistent width with nav */
 .container {
   max-width: 960px;
   margin: 0 auto;
-  padding: 1.5rem;
+  padding: 2rem 1.5rem 3rem;
+  width: 100%;
+}
+
+/* ECG Classifier page: one big centered container holding all components */
+.container--upload {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 2rem 1rem 3rem;
+  min-height: calc(100vh - 4rem);
+  box-sizing: border-box;
+}
+
+.container--upload .page-grid {
+  width: 100%;
+  max-width: 560px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 1.25rem;
+  background: var(--card-bg);
+  border-radius: 16px;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08), 0 1px 3px rgba(0, 0, 0, 0.06);
+  padding: 2rem;
+  transition: background-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+[data-theme="dark"] .container--upload .page-grid {
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.35), 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+.container--upload .page-grid .card,
+.container--upload .page-grid-right,
+.container--upload .page-grid-right .card {
+  width: 100%;
+  max-width: 100%;
+}
+
+.container--upload .page-grid .card {
+  background: var(--gray-bg);
+  margin-bottom: 0;
+}
+
+.container--upload .page-grid .card:last-child,
+.container--upload .page-grid-right .card {
+  background: var(--gray-bg);
+}
+
+.container--upload .page-grid-right {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
 }
 
 /* Desktop: two-column layout (briefing: single column mobile, two column desktop) */
@@ -110,6 +169,18 @@ body {
     grid-template-columns: 1fr 1fr;
     gap: 1.5rem;
     align-items: start;
+    max-width: 880px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  /* Override: ECG Classifier stays single centered column on all sizes */
+  .container--upload .page-grid {
+    display: flex;
+    flex-direction: column;
+    max-width: 560px;
+    margin-left: auto;
+    margin-right: auto;
   }
 
   .dashboard-grid {
@@ -131,41 +202,79 @@ body {
 
 @media (max-width: 768px) {
   .container {
-    padding: 1rem;
+    padding: 1.5rem 1rem 2.5rem;
+  }
+
+  .nav-inner {
+    padding: 0;
   }
 
   .confusion-grid {
     grid-template-columns: 1fr;
   }
+
+  .page-grid {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .page-grid .card,
+  .page-grid-right {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  /* ECG Classifier page: narrow centered column on mobile */
+  .page-grid-right {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .page-grid .card:first-child {
+    max-width: 420px;
+  }
+
+  .page-grid-right .card {
+    width: 100%;
+    max-width: 420px;
+  }
 }
 
-/* Cards — contain for faster layout */
+/* Cards — contain for faster layout, centered content */
 .card {
   background: var(--card-bg);
   border-radius: var(--radius);
   box-shadow: var(--shadow);
-  padding: 1.25rem;
-  margin-bottom: 1rem;
+  padding: 1.5rem;
+  margin-bottom: 1.25rem;
   transition: background-color 0.25s ease, color 0.25s ease, box-shadow 0.25s ease;
   contain: layout style paint;
 }
 
 .card-title {
-  font-size: 1rem;
+  font-size: 1.125rem;
   font-weight: 600;
-  margin: 0 0 0.75rem 0;
+  margin: 0 0 1rem 0;
   color: var(--text);
+  text-align: center;
+  letter-spacing: -0.01em;
 }
 
-/* Upload zone */
+/* Upload zone — centered */
 .upload-zone {
   border: 2px dashed var(--gray-border);
   border-radius: var(--radius);
-  padding: 2rem;
+  padding: 2.25rem 2rem;
   text-align: center;
   background: var(--card-bg);
   transition: border-color 0.2s, background 0.2s;
   cursor: pointer;
+  margin: 0 auto;
+  max-width: 100%;
 }
 
 .upload-zone:focus-visible {
@@ -223,13 +332,14 @@ body {
   cursor: not-allowed;
 }
 
-/* Options row */
+/* Options row — centered */
 .options-row {
   display: flex;
   flex-wrap: wrap;
   gap: 1rem;
   align-items: center;
-  margin: 1rem 0;
+  justify-content: center;
+  margin: 1.25rem 0 0;
 }
 
 .options-row label {
@@ -268,9 +378,12 @@ body {
   width: 100% !important;
 }
 
-/* Prediction bars */
+/* Prediction bars — centered block */
 .prediction-bars {
   margin-top: 1rem;
+  max-width: 420px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .pred-row {
@@ -380,12 +493,15 @@ body {
   background: #b91c1c;
 }
 
-/* Dashboard: summary cards */
+/* Dashboard: summary cards — centered grid */
 .summary-cards {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   gap: 1rem;
-  margin-bottom: 1.5rem;
+  justify-content: center;
+  justify-items: stretch;
+  max-width: 720px;
+  margin: 0 auto 1.5rem;
 }
 
 .summary-card {
@@ -393,12 +509,14 @@ body {
   border-radius: var(--radius);
   box-shadow: var(--shadow);
   padding: 1.25rem;
+  text-align: center;
 }
 
 .summary-card .metric-name {
   font-size: 0.875rem;
   color: var(--text-muted);
   margin: 0 0 0.25rem 0;
+  text-align: center;
 }
 
 .summary-card .metric-value {
@@ -408,12 +526,13 @@ body {
   margin: 0;
 }
 
-/* Dashboard: tabs */
+/* Dashboard: tabs — centered */
 .model-tabs {
   display: flex;
   gap: 0.25rem;
   margin-bottom: 1rem;
   flex-wrap: wrap;
+  justify-content: center;
 }
 
 .model-tabs button {
@@ -455,6 +574,7 @@ body {
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
   gap: 1rem;
   margin-top: 1rem;
+  justify-content: center;
 }
 
 .confusion-grid .dashboard-chart {
