@@ -9,25 +9,11 @@
   var comparisonChart = document.getElementById("comparisonChart");
   var confusionGrid = document.getElementById("confusionGrid");
   var loadingOverlay = document.getElementById("loadingOverlay");
-  var themeToggle = document.getElementById("themeToggle");
 
   var metricsData = {};
   var selectedModel = "resnet";
   var labelOrder = ["NORM", "MI", "STTC", "CD", "HYP"];
-  var STORAGE_THEME = "ecg-theme";
 
-  function getTheme() {
-    var stored = localStorage.getItem(STORAGE_THEME);
-    if (stored === "dark" || stored === "light") return stored;
-    if (typeof window.matchMedia !== "undefined" && window.matchMedia("(prefers-color-scheme: dark)").matches) return "dark";
-    return "light";
-  }
-  function setTheme(theme) {
-    var next = theme === "dark" ? "dark" : "light";
-    document.documentElement.setAttribute("data-theme", next);
-    localStorage.setItem(STORAGE_THEME, next);
-    applyChartTheme();
-  }
   function applyChartTheme() {
     var isDark = document.documentElement.getAttribute("data-theme") === "dark";
     var update = {
@@ -57,13 +43,8 @@
     };
   }
 
-  if (themeToggle) {
-    themeToggle.addEventListener("click", function () {
-      var current = document.documentElement.getAttribute("data-theme");
-      setTheme(current === "dark" ? "light" : "dark");
-    });
-  }
-  setTheme(getTheme());
+  // Update all Plotly charts when theme changes (theme.js dispatches ecg-theme-change)
+  window.addEventListener("ecg-theme-change", applyChartTheme);
 
   function setLoading(visible) {
     if (visible) loadingOverlay.classList.add("visible");

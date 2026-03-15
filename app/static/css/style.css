@@ -52,6 +52,7 @@ body {
   line-height: 1.5;
   color: var(--text);
   background: var(--gray-bg);
+  transition: background-color 0.25s ease, color 0.25s ease;
 }
 
 /* Navigation */
@@ -62,6 +63,7 @@ body {
   padding: 1rem 1.5rem;
   background: var(--card-bg);
   box-shadow: var(--shadow);
+  transition: background-color 0.25s ease, color 0.25s ease, box-shadow 0.25s ease;
 }
 
 .nav-title {
@@ -125,6 +127,7 @@ body {
   box-shadow: var(--shadow);
   padding: 1.25rem;
   margin-bottom: 1rem;
+  transition: background-color 0.25s ease, color 0.25s ease, box-shadow 0.25s ease;
 }
 
 .card-title {
@@ -443,7 +446,7 @@ body {
   background: var(--card-bg);
   color: var(--text);
   cursor: pointer;
-  transition: background 0.2s, border-color 0.2s;
+  transition: background 0.25s ease, border-color 0.25s ease, color 0.25s ease;
   font-size: 1.1rem;
 }
 .theme-toggle:hover {

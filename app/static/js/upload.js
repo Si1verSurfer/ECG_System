@@ -1,22 +1,4 @@
 (function () {
-  var THEME_KEY = "ecg-theme";
-  function getTheme() {
-    var s = localStorage.getItem(THEME_KEY);
-    if (s === "dark" || s === "light") return s;
-    if (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches) return "dark";
-    return "light";
-  }
-  function setTheme(theme) {
-    var next = theme === "dark" ? "dark" : "light";
-    document.documentElement.setAttribute("data-theme", next);
-    localStorage.setItem(THEME_KEY, next);
-  }
-  setTheme(getTheme());
-  var themeBtn = document.getElementById("themeToggle");
-  if (themeBtn) themeBtn.addEventListener("click", function () {
-    setTheme(document.documentElement.getAttribute("data-theme") === "dark" ? "light" : "dark");
-  });
-
   var uploadZone = document.getElementById("uploadZone");
   var fileInput = document.getElementById("fileInput");
   var modelSelect = document.getElementById("modelSelect");
@@ -30,6 +12,14 @@
   var toast = document.getElementById("toast");
 
   var selectedFile = null;
+  var lastChartData = null;
+
+  // Re-render ECG chart when theme changes so it uses the new colors
+  window.addEventListener("ecg-theme-change", function () {
+    if (lastChartData && ecgChartDiv && typeof renderEcgChart === "function") {
+      renderEcgChart("ecgChartDiv", lastChartData.signal, lastChartData.leadNames, lastChartData.rate);
+    }
+  });
 
   function showToast(message, isError) {
     toast.textContent = message;
@@ -138,6 +128,7 @@
         var rate = parseInt(rateSelect.value, 10) || 500;
         if (signal.length > 0 && ecgChartDiv) {
           chartSection.style.display = "block";
+          lastChartData = { signal: signal, leadNames: leadNames, rate: rate };
           if (typeof renderEcgChart === "function") {
             renderEcgChart("ecgChartDiv", signal, leadNames, rate);
           }
