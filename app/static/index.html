@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ECG Classifier — Upload & Predict</title>
+  <link rel="preload" href="css/style.css" as="style">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -59,15 +60,15 @@
     </div>
   </main>
 
-  <div class="loading-overlay" id="loadingOverlay">
-    <div class="spinner"></div>
+  <div class="loading-overlay" id="loadingOverlay" aria-hidden="true" aria-live="polite">
+    <div class="spinner" aria-hidden="true"></div>
   </div>
 
-  <div class="toast" id="toast"></div>
+  <div class="toast" id="toast" role="status" aria-live="polite" aria-atomic="true"></div>
 
-  <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
-  <script src="js/theme.js"></script>
-  <script src="js/ecg_chart.js"></script>
-  <script src="js/upload.js"></script>
+  <script src="https://cdn.plot.ly/plotly-latest.min.js" defer></script>
+  <script src="js/theme.js" defer></script>
+  <script src="js/ecg_chart.js" defer></script>
+  <script src="js/upload.js" defer></script>
 </body>
 </html>
